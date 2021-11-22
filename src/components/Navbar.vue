@@ -6,7 +6,9 @@
       dark
     >
 
-      <v-toolbar-title>Alfa Web</v-toolbar-title>
+      <v-toolbar-title>
+        <h2 class="mr-9">Cursos AlfaWeb</h2>
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 <!--iconos -->
