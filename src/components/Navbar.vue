@@ -20,7 +20,7 @@
 
       <v-btn 
         color="deep-purple accent-4">
-        <v-icon> account</v-icon>
+        <v-icon> forum</v-icon>
       </v-btn>
       <span class="mr-2 d-none d-md-inline">{{ email }}</span>
       <Logout />
