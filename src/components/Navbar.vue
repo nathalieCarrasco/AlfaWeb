@@ -14,15 +14,19 @@
 <!--iconos -->
       <v-btn
           color="deep-purple accent-4"
-        >
+        ><router-link to="/">
+        home</router-link>
           <v-icon>home</v-icon>
         </v-btn>
 
       <v-btn 
         color="deep-purple accent-4">
+        <router-link to="/administracion">
+        user</router-link>
         <v-icon> forum</v-icon>
       </v-btn>
       <span class="mr-2 d-none d-md-inline">{{ email }}</span>
+      
       <Logout />
     </v-app-bar>
   </div>

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import { db } from "@/firebase/firebaseDb.js";
 import { collection, getDocs , addDoc } from "firebase/firestore";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -9,6 +10,12 @@ export default new Vuex.Store({
     cursos:[],
     email:'',
 
+
+  },
+  getters: {
+    getCursos: ({ cursos }) => {
+      return cursos;
+    },
   },
   mutations: {
     ADD_CURSO(state,curso){
@@ -16,16 +23,16 @@ export default new Vuex.Store({
       state.cursos.push({
 
         id:curso.id,
-        codigo:curso.data().Codigo,
-        costo:curso.data().Costo,
-        cupos:curso.data().Cupos,
-        descripcion:curso.data().Descripcion,
-        duracion:curso.data().Duracion,
-        estado:curso.data().Estado,
-        fecha:curso.data().Fecha,
-        inscritos:curso.data().Inscritos,
-        nombre:curso.data().Nombre,
-        url:curso.data().URL
+        codigo:curso.data().codigo,
+        costo:curso.data().costo,
+        cupos:curso.data().cupos,
+        descripcion:curso.data().descripcion,
+        duracion:curso.data().duracion,
+        estado:curso.data().estado,
+        fecha:curso.data().fecha,
+        inscritos:curso.data().inscritos,
+        nombre:curso.data().nombre,
+        url:curso.data().url
       
       })
     },

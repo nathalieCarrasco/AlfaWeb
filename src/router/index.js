@@ -1,33 +1,56 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import Home from "../views/Home.vue";
+import Login from "../views/Login.vue";
+import Registro from "../views/Registro.vue";
 import { getAuth } from "firebase/auth";
-
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
+    path: "/",
+    name: "Home",
     component: Home,
-    meta:{
-      privado:true,
-  }
+    meta: {
+      privado: true,
+    },
+  },
+  {
+    path: "/registro",
+    name: "registro",
+    component: Registro,
+  },
+  {
+    path: "/addcurso",
+    name: "Newcurso",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Newcurso.vue"),
+    meta: {
+      privado: true,
+    },
   },
   {
     path: "/login",
     component: Login,
   },
   {
-    path: '/about',
-    name: 'About',
+    path: "/administracion",
+    name: "administracion",
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/Administracion.vue"),
+    meta: {
+      privado: true,
+    }},
+  {
+    path: "/about",
+    name: "About",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
-]
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+  },
+];
 
 const router = new VueRouter({
   mode: "history",

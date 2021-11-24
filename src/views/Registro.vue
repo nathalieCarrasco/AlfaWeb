@@ -3,12 +3,7 @@
     <v-container>
       <v-row>
         <v-col>
-          <div class="datosIngreso">
-            <h2>User: usuario1@alfaweb.com</h2>
-            <h2>Pass: 1234567</h2>
-          </div>
-
-          <h2 class="tituloLogin mt-3 mb-5">Login de Usuario</h2>
+          <h2 class="tituloRegistro mt-3 mb-5">Registro de Usuario</h2>
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-text-field
               v-model="user"
@@ -26,8 +21,9 @@
               name="input-10-2"
               label="Contraseña"
               hint="Min 6 caracteres"
-              value="fafaffa"
+              value="wqfasds"
               class="input-group--focused"
+              @click:append="show2 = !show2"
             ></v-text-field>
 
             <div class="btnForm">
@@ -35,13 +31,18 @@
                 :disabled="!valid"
                 color="success"
                 class="mr-4"
-                @click.prevent="login"
-                >INICIAR SESION</v-btn
+                @click="login"
               >
+                REGISTRARSE
+              </v-btn>
 
-              <v-btn color="error" class="mr-4"> LIMPIAR FORMULARIO </v-btn>
+              <v-btn color="error" class="mr-4" @click="limpiarForm">
+                LIMPIAR FORMULARIO
+              </v-btn>
 
-              <v-btn color="warning"  @click="$router.push('/registro')"> IR A REGISTRO </v-btn>
+              <v-btn color="warning" @click="$router.push('/login')">
+                IR A LOGIN
+              </v-btn>
             </div>
           </v-form>
         </v-col>
@@ -51,10 +52,10 @@
 </template>
 
 <script>
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export default {
-  name: "Login",
+  name: "registro",
   // props: {},
   data: function () {
     return {
@@ -67,32 +68,36 @@ export default {
       },
       valid: true,
       emailRules: [
-        (v) => !!v || "E-mail requerido",
+        (v) => !!v || "E-mail es requerido",
         (v) => /.+@.+\..+/.test(v) || "El E-mail debe ser válido",
       ],
+      showSnackbar: false,
     };
   },
   // computed: {},
   methods: {
     login() {
+      this.showSnackbar = true;
       const auth = getAuth();
-      signInWithEmailAndPassword(auth,this.user, this.pass)
+      createUserWithEmailAndPassword(auth, this.user, this.pass)
         .then((userCredential) => {
           // Signed in
           const user = userCredential.user;
-          console.log(user)
-          this.$router.push('/')
           // ...
         })
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          alert('errorMessage')
+          // ..
         });
+    },
+    limpiarForm() {
+      this.user = "";
+      this.pass = "";
     },
   },
   // watch: {},
-  // components: {},
+  components: {},
   // -- Lifecycle Methods
   // beforeCreate() {},
   // created() {},
@@ -107,7 +112,7 @@ export default {
 </script>
 
 <style scoped>
-.tituloLogin {
+.tituloRegistro {
   font-size: 40px;
 }
 .datosIngreso {
