@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="tituloLogin mt-3 mb-5">Agregar Tu Curso</h2>
+    <h1 class="tituloLogin mt-3 mb-5">Editar Curso :{{id}}</h1>
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-text-field
         v-model="form.nombre"
@@ -109,14 +109,14 @@ export default {
   // computed: {},
   methods: {
     new_curso() {
-      this.addcurso(this.form)
-        .then(() => {
-          alert("fcurso agregado con exito");
+      // this.addcurso(this.form)
+      //   .then(() => {
+      //     alert("curso agregado con exito");
 
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   });
     },
     ...mapActions(["addcurso"]),
   },

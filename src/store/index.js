@@ -56,5 +56,6 @@ export default new Vuex.Store({
       return  addDoc(collection(db, "cursos"), curso);
     }
   },
+  
   modules: {},
 });
