@@ -5,6 +5,11 @@ import { collection, getDocs , addDoc } from "firebase/firestore";
 
 Vue.use(Vuex);
 
+const totalCupos = (cursos) =>
+  cursos.reduce((acc, act) => acc + act.cupos,0 );
+const totalInscritos = (cursos) =>
+  cursos.reduce((acc, act) => acc + act.inscritos, 0);
+
 export default new Vuex.Store({
   state: {
     cursos:[],
@@ -16,8 +21,39 @@ export default new Vuex.Store({
     getCursos: ({ cursos }) => {
       return cursos;
     },
+    getCursos: ({ cursos }) => {
+      return cursos;
+    },
+    getTotalCupos:  (state) => {
+      return state.cursos.reduce(function(total,curso){
+        return total + parseInt(curso.cupos)
+      })
+    },
+    getTotalInscritos:(state)=> {
+      return state.cursos.reduce(function(total, curso){
+        return total + parseInt(curso.inscritos)
+      },0)
+    },
+    getTotalCuposRestantes: ({ cursos }) => {
+      return totalCupos(cursos) - totalInscritos(cursos)
+    },
+    getTotalCursosTerminados: ({ cursos }) => {
+      return cursos.filter((curso) => !curso.estado).length
+    },
+    getTotalCursosActivos: ({ cursos }) => {
+      return cursos.filter((curso) => curso.estado).length
+    },
+    getTotalCursos: ({ cursos }) => {
+      return cursos.length
+    },
   },
   mutations: {
+    SET_EMAIL(state, email){
+      state.email = email
+    },
+    RESET_EMAIL(state){
+      state.email = ''
+    },
     ADD_CURSO(state,curso){
 
       state.cursos.push({
@@ -54,7 +90,25 @@ export default new Vuex.Store({
     
     addcurso({},curso){
       return  addDoc(collection(db, "cursos"), curso);
-    }
+    },
+     //OBTENER CURSO POR ID (UNITARIO, SÓLO UN CURSO)
+     fetchIdCurso({}, id_curso){
+      return db.collection('cursos').doc(id_curso).get(); 
+    },
+    //UPDATE
+    updateCurso({}, curso){
+      return db.collection('cursos').doc(curso.id).update(curso);
+    },
+    //DELETE
+    deleteCurso({}, id_curso){
+      return db.collection('cursos').doc(id_curso).delete();
+    },
+    setMail({commit}, email){
+      commit('SET_EMAIL', email)
+    },
+    resetEmail({commit}){
+      commit('RESET_EMAIL')
+    },
   },
   
   modules: {},

@@ -21,9 +21,9 @@ const routes = [
     component: Registro,
   },
   {
-    path: "/editcurso/:id",
+    path: "/edit_curso/:id",
     name: "editcurso",
-    props:['id'],
+    props:true,
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/Edit.vue"),
     meta: {

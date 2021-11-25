@@ -75,7 +75,7 @@
         <v-switch flat :label="`estado terminado: `"></v-switch>
       </v-sheet>
 
-      <v-btn @click.prevent="new_curso" color="success" class="mr-4">
+      <v-btn  color="success" class="mr-4">
         agregar curso
       </v-btn>
 
@@ -88,10 +88,11 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
-  name: "newcurso",
-  // props: {},
+  name: "edit",
+  //props: {id},
   data: function () {
     return {
+
       form: {
         codigo: "",
         nombre: "",
@@ -118,7 +119,7 @@ export default {
       //     console.log(error);
       //   });
     },
-    ...mapActions(["addcurso"]),
+    //...mapActions(["addcurso"]),
   },
   // watch: {},
   // components: {},

@@ -176,10 +176,12 @@
             </v-toolbar>
           </template>
           <template v-slot:[`item.actions`]="{ item }">
+          
             <v-icon small class="mr-2" @click="editItem(item)">
               pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item.id)">delete </v-icon>
+            
+            <v-icon small @click="deleteItem(item)">delete </v-icon>
           </template>
           <template v-slot:[`item.data.estado`]="{ item }">
             <span>{{ item.data.estado ? "Sí" : "No" }}</span>
@@ -190,26 +192,26 @@
     <v-row>
       <v-col>
         <v-alert dense outlined color="purple" icon="account-group">
-          Cantidad total de alumnos permitidos: 
+          Cantidad total de alumnos permitidos: {{ getTotalCupos }}
         </v-alert>
 
         <v-alert dense outlined color="blue" icon="account-multiple-check">
-          Cantidad total de alumnos inscritos: 
+          Cantidad total de alumnos inscritos: {{ getTotalInscritos }}
         </v-alert>
 
         <v-alert dense outlined color="pink" icon="account-clock">
-          Cantidad total de cupos restantes: 
+          Cantidad total de cupos restantes: {{ getTotalCuposRestantes }}
         </v-alert>
         <v-alert dense outlined color="red" icon="cancel">
-          Cantidad total de cursos terminados: 
+          Cantidad total de cursos terminados: {{getTotalCursosTerminados}}
         </v-alert>
 
         <v-alert dense outlined color="teal" icon="check">
-          Cantidad total de cursos activos: 
+          Cantidad total de cursos activos: {{ getTotalCursosActivos }}
         </v-alert>
 
         <v-alert dense outlined color="deep-orange" icon="bell-ring">
-          Cantidad total de cursos: 
+          Cantidad total de cursos:  {{ getTotalCursos }}
         </v-alert>
       </v-col>
     </v-row>
@@ -217,7 +219,7 @@
 </template>
 
 <script>
-import { mapActions,mapState} from "vuex";
+import { mapActions,mapState,mapGetters } from "vuex";
 
 
 
@@ -226,6 +228,7 @@ import { mapActions,mapState} from "vuex";
     name: "administracion",
     data () {
       return {
+        id:'curso.id',
         dialog: false,
         dialogDelete: false,
         headers: [
@@ -275,10 +278,18 @@ import { mapActions,mapState} from "vuex";
     
 
   computed: {
-    ...mapState(['cursos'
+    ...mapState(['cursos']),
+    ...mapGetters([
+      "getCursos",
+      "getTotalCupos",
+      "getTotalInscritos",
+      "getTotalCuposRestantes",
+      "getTotalCursosTerminados",
+      "getTotalCursosActivos",
+      "getTotalCursos",
     ]),
     formTitle() {
-      return this.editedIndex ? "Editar Curso" : "Agregar Curso";
+      return this.editedIndex ?"Editar Curso" :"Agregar Curso";
     },
   },
   methods: {
@@ -290,30 +301,37 @@ import { mapActions,mapState} from "vuex";
       this.fetchCursos();
     },
     editItem(item) {
-      this.editedIndex = item.id;
-      this.editedItem = { ...item.data };
-      this.dialog = true;
+      this.$router.push("/edit_curso/" + item.id);
     },
-    deleteItem(id) {
-      this.editedIndex = id;
+  
+    deleteItem(item) {
+     this.idEliminar = item.id;
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.delete_Curso(this.editedIndex);
-      this.closeDelete();
+      this.deleteCurso(this.idEliminar)
+        .then((resp) => {
+          alert("Borrado exitosamente");
+          this.idEliminar = "";
+          this.dialogDelete = false;
+          this.fetchCursos();
+        })
+        .catch((error) => {
+          alert("Ups, hubo un error al eliminar el curso" + error + "intentalo , otra vez");
+        });
     },
     close() {
       this.dialog = false;
       this.$nextTick(() => {
-        this.editedItem = { ...this.defaultItem };
-        this.editedIndex = null;
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
       });
     },
     closeDelete() {
       this.dialogDelete = false;
       this.$nextTick(() => {
-        this.editedItem = { ...this.defaultItem };
-        this.editedIndex = null;
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
       });
     },
 
@@ -325,9 +343,21 @@ import { mapActions,mapState} from "vuex";
 
         })
         .catch((error) => {
-          console.log(error);
+          alert("Ups, hubo un error al agregar" + error);
         });
       },
+      reset() {
+      this.addItem.nombre = "";
+      this.addItem.img = "";
+      this.addItem.cupos = "";
+      this.addItem.inscritos = "";
+      this.addItem.duracion = "";
+      this.addItem.costo = "";
+      this.addItem.estado = "";
+      this.addItem.fecha = "";
+      this.addItem.id = "";
+      this.addItem.descripcion = "";
+    },
   },
   
   watch: {
@@ -355,4 +385,10 @@ import { mapActions,mapState} from "vuex";
 </script>
 
 <style scoped>
+.btnModalAgregar, .textoEliminar {
+  display: flex;
+  justify-content: center;
+}
+
+
 </style>
