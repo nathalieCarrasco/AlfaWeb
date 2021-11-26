@@ -52,6 +52,7 @@
 
 <script>
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { mapActions } from "vuex";
 
 export default {
   name: "Login",
@@ -74,10 +75,12 @@ export default {
   },
   // computed: {},
   methods: {
+    ...mapActions(['setMail']),
     login() {
       const auth = getAuth();
       signInWithEmailAndPassword(auth,this.user, this.pass)
         .then((userCredential) => {
+          this.setMail(this.user)
           // Signed in
           const user = userCredential.user;
           console.log(user)

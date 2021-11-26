@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import { db } from "@/firebase/firebaseDb.js";
-import { collection, getDocs , addDoc } from "firebase/firestore";
+import { collection, getDocs , addDoc,doc,getDoc,updateDoc, deleteDoc  } from "firebase/firestore";
 
 Vue.use(Vuex);
 
@@ -18,9 +18,7 @@ export default new Vuex.Store({
 
   },
   getters: {
-    getCursos: ({ cursos }) => {
-      return cursos;
-    },
+ 
     getCursos: ({ cursos }) => {
       return cursos;
     },
@@ -57,7 +55,6 @@ export default new Vuex.Store({
     ADD_CURSO(state,curso){
 
       state.cursos.push({
-
         id:curso.id,
         codigo:curso.data().codigo,
         costo:curso.data().costo,
@@ -91,18 +88,26 @@ export default new Vuex.Store({
     addcurso({},curso){
       return  addDoc(collection(db, "cursos"), curso);
     },
-     //OBTENER CURSO POR ID (UNITARIO, SÓLO UN CURSO)
-     fetchIdCurso({}, id_curso){
-      return db.collection('cursos').doc(id_curso).get(); 
+     //OBTENER  SÓLO UN CURSO)
+    fetchIdCurso({},id_curso){
+      const docRef = doc(db, "cursos", id_curso);
+      return getDoc(docRef);
+      
     },
     //UPDATE
-    updateCurso({}, curso){
-      return db.collection('cursos').doc(curso.id).update(curso);
+    updateCurso({},curso){
+      const Curso_Update = doc(db, "cursos", curso.id);
+      // Envio el curso completo para editar 
+      return updateDoc(Curso_Update, {
+        curso
+      });
     },
     //DELETE
-    deleteCurso({}, id_curso){
-      return db.collection('cursos').doc(id_curso).delete();
+    deleteCurso({},id_curso){
+      return deleteDoc(doc(db, "cursos", id_curso));
     },
+
+
     setMail({commit}, email){
       commit('SET_EMAIL', email)
     },

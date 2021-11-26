@@ -8,6 +8,7 @@
 
 <script>
 import { getAuth, signOut } from "firebase/auth";
+import { mapActions } from "vuex";
 export default {
   name: "Logout",
   // props: {},
@@ -16,11 +17,15 @@ export default {
   },
   // computed: {},
   methods: {
+    ...mapActions(['resetEmail']),
+
     logout() {
     const auth = getAuth();
     signOut(auth).then(() => {
+      this.resetEmail();
   // Sign-out successful.
   alert('si funciona')
+
   this.$router.push('/login');
 }).catch((error) => {
   // An error happened.

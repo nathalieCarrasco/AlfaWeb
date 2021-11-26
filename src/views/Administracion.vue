@@ -26,7 +26,7 @@
                 </template>
                 <v-card>
                   <v-card-title>
-                    <span class="text-h4">{{ formTitle }}</span>
+                    <span class="text-h4">Agregar Curso</span>
                   </v-card-title>
 
                   <v-card-text>
@@ -35,7 +35,6 @@
                         <v-col cols="12" md="6">
                           <v-text-field
                             v-model="editedItem.codigo"
-                            :error-messages="codigoErrors"
                             label="Código"
                             required
                             @input="$v.editedItem.codigo.$touch()"
@@ -45,7 +44,6 @@
                         <v-col cols="12" md="6">
                           <v-text-field
                             v-model="editedItem.nombre"
-                            :error-messages="nombreErrors"
                             label="Nombre"
                             required
                             @input="$v.editedItem.nombre.$touch()"
@@ -56,7 +54,6 @@
                           <v-text-field
                             type="number"
                             v-model="editedItem.cupos"
-                            :error-messages="cuposErrors"
                             label="Cupos"
                             required
                             @input="$v.editedItem.cupos.$touch()"
@@ -67,7 +64,6 @@
                           <v-text-field
                             type="number"
                             v-model="editedItem.inscritos"
-                            :error-messages="inscritosErrors"
                             label="Inscritos"
                             required
                             @input="$v.editedItem.inscritos.$touch()"
@@ -78,7 +74,6 @@
                           <v-text-field
                             type="number"
                             v-model="editedItem.costo"
-                            :error-messages="costoErrors"
                             label="Costo"
                             required
                             @input="$v.editedItem.costo.$touch()"
@@ -88,7 +83,6 @@
                         <v-col cols="12" md="6">
                           <v-text-field
                             v-model="editedItem.duracion"
-                            :error-messages="duracionErrors"
                             label="Duración"
                             required
                             @input="$v.editedItem.duracion.$touch()"
@@ -98,7 +92,6 @@
                         <v-col cols="12">
                           <v-text-field
                             v-model="editedItem.url"
-                            :error-messages="urlErrors"
                             label="URL Imagen"
                             required
                             @input="$v.editedItem.url.$touch()"
@@ -109,7 +102,6 @@
                           <v-textarea
                             rows="2"
                             v-model="editedItem.descripcion"
-                            :error-messages="descripcionErrors"
                             label="Descripción"
                             required
                             @input="$v.editedItem.descripcion.$touch()"
@@ -119,7 +111,6 @@
                         <v-col cols="12" md="6">
                           <v-text-field
                             v-model="editedItem.fecha"
-                            :error-messages="fechaErrors"
                             label="Fecha"
                             required
                             placeholder="01/01/2021"
@@ -178,7 +169,7 @@
           <template v-slot:[`item.actions`]="{ item }">
           
             <v-icon small class="mr-2" @click="editItem(item)">
-              pencil
+              edit
             </v-icon>
             
             <v-icon small @click="deleteItem(item)">delete </v-icon>
@@ -294,12 +285,12 @@ import { mapActions,mapState,mapGetters } from "vuex";
   },
   methods: {
     ...mapActions([
-      "fetchCursos","addcurso"
+      "fetchCursos","addcurso","deleteCurso"
 
     ]),
-    fetchCursos() {
-      this.fetchCursos();
-    },
+    // fetch_Cursos() {
+    //   this.fetchCursos();
+    // },
     editItem(item) {
       this.$router.push("/edit_curso/" + item.id);
     },
@@ -311,12 +302,14 @@ import { mapActions,mapState,mapGetters } from "vuex";
     deleteItemConfirm() {
       this.deleteCurso(this.idEliminar)
         .then((resp) => {
+          this.fetchCursos();
           alert("Borrado exitosamente");
           this.idEliminar = "";
           this.dialogDelete = false;
-          this.fetchCursos();
+          
         })
         .catch((error) => {
+          console.log(error)
           alert("Ups, hubo un error al eliminar el curso" + error + "intentalo , otra vez");
         });
     },
@@ -340,6 +333,10 @@ import { mapActions,mapState,mapGetters } from "vuex";
         this.addcurso(this.editedItem)
         .then(() => {
           alert("curso agregado con exito");
+           this.dialog = false;
+           this.$router.push("/")
+           // this.reset();
+           // this.fetchCursos();
 
         })
         .catch((error) => {
@@ -348,7 +345,7 @@ import { mapActions,mapState,mapGetters } from "vuex";
       },
       reset() {
       this.addItem.nombre = "";
-      this.addItem.img = "";
+      this.addItem.url = "";
       this.addItem.cupos = "";
       this.addItem.inscritos = "";
       this.addItem.duracion = "";
@@ -360,14 +357,14 @@ import { mapActions,mapState,mapGetters } from "vuex";
     },
   },
   
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-    dialogDelete(val) {
-      val || this.closeDelete();
-    },
-  },
+ // watch: {
+   // dialog(val) {
+   //   val || this.close();
+   // },
+    // dialogDelete(val) {
+    //   val || this.closeDelete();
+    // },
+ // },
   // components: {},
   // -- Lifecycle Methods
   // beforeCreate() {},

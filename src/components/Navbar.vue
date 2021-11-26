@@ -43,13 +43,18 @@ export default {
   computed: {
     ...mapState(["email"]),
   },
+   methods: {
+    ...mapActions(["fetchCursos"]),
+  },
   // watch: {},
   components: {
     Logout,
   },
   // -- Lifecycle Methods
   // beforeCreate() {},
-  // created() {},
+   created() {
+    this.fetchCursos();
+  },
   // beforeMount() {},
   // mounted() {},
   // beforeUpdate() {},

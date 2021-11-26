@@ -1,139 +1,150 @@
 <template>
-  <v-container>
-    <h1 class="tituloLogin mt-3 mb-5">Editar Curso :{{id}}</h1>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-text-field
-        v-model="form.nombre"
-        :counter="10"
-        :rules="nameRules"
-        label="Nombre"
-        required
-      ></v-text-field>
+  <div>
+    <v-container>
+      <h1>Editando el Curso : {{ editItem.nombre }}</h1>
+      <v-row>
+        <v-col cols="12">
+          <v-text-field v-model="editItem.nombre" label="Nombre"></v-text-field>
 
-      <v-text-field
-        v-model="form.url"
-        :rules="urlRules"
-        label="url de la imagen "
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="form.cupos"
-        type="number"
-        :rules="cuposRules"
-        label="cupos del curso "
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="form.inscritos"
-        type="number"
-        :rules="inscritosRules"
-        label="Inscritos "
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="form.costo"
-        type="number"
-        :rules="costosRules"
-        label="Costo del curso"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="form.duracion"
-        :rules="duracionRules"
-        label="Duracion del curso "
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="form.codigo"
-        :counter="10"
-        :rules="nameRules"
-        label="codigo curso"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="form.fecha"
-        type="datetime-local"
-        :counter="10"
-        :rules="timeRules"
-        label=""
-        required
-      ></v-text-field>
-
-      <v-textarea
-        v-model="form.descripcion"
-        rows="2"
-        label="Descripción"
-      ></v-textarea>
-
-      <v-sheet width="100%" height="100%" class="pa-12">
-        <v-switch flat :label="`estado terminado: `"></v-switch>
-      </v-sheet>
-
-      <v-btn  color="success" class="mr-4">
-        agregar curso
-      </v-btn>
-
-      <v-btn color="error" class="mr-4"> Reset Form </v-btn>
-
-      <v-btn color="warning"> Reset Validation </v-btn>
-    </v-form>
-  </v-container>
+          <v-text-field
+            v-model="editItem.url"
+            label="Url de la Imagen del curso"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            v-model="editItem.cupos"
+            label="Cupos del curso"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            v-model="editItem.inscritos"
+            label="Inscritos en el curso"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            v-model="editItem.duracion"
+            label="Duración del curso"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            v-model="editItem.costo"
+            label="Costo del curso"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            v-model="editItem.codigo"
+            label="Código del curso"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12">
+          <v-textarea
+            outlined
+            v-model="editItem.descripcion"
+            label="Descripción del curso"
+          ></v-textarea>
+        </v-col>
+        <v-col cols="12">
+          <v-text-field
+            v-model="editItem.fecha"
+            label="Fecha de Registro"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <div class="btnEdicion">
+        <v-btn class="mr-3" color="success" @click.prevent="editCurso"
+          >Actualizar Curso</v-btn
+        >
+        <v-btn
+          class="ml-3"
+          color="warning"
+          @click="$router.push('/administracion')"
+          >Volver</v-btn
+        >
+      </div>
+    </v-container>
+  </div>
 </template>
+
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapActions } from "vuex";
 export default {
-  name: "edit",
-  //props: {id},
+  name: "edicion",
+  props: ["id"],
+
   data: function () {
     return {
-
-      form: {
-        codigo: "",
+      editItem: {
         nombre: "",
         url: "",
-        cupos: 0,
-        inscritos: 0,
+        cupos: "",
+        inscritos: "",
         duracion: "",
-        costo: 0,
+        costo: "",
+        estado: "",
+        codigo: "",
         descripcion: "",
-        fecha: new Date(),
-        estado: false,
+        fecha: "",
       },
     };
   },
   // computed: {},
   methods: {
-    new_curso() {
-      // this.addcurso(this.form)
-      //   .then(() => {
-      //     alert("curso agregado con exito");
-
-      //   })
-      //   .catch((error) => {
-      //     console.log(error);
-      //   });
+    ...mapActions(["fetchIdCurso","updateCurso"]),
+    async setCurso() {
+      let response = await this.fetchIdCurso(this.id);
+      console.log(response.data());
+      let curso = response.data();
+      this.editItem.nombre = curso.nombre;
+      this.editItem.url = curso.url;
+      this.editItem.cupos = curso.cupos;
+      this.editItem.inscritos = curso.inscritos;
+      this.editItem.duracion = curso.duracion;
+      this.editItem.costo = curso.costo;
+      this.editItem.estado = curso.estado;
+      this.editItem.descripcion = curso.descripcion;
+      this.editItem.fecha = curso.fecha;
+      this.editItem.codigo = curso.codigo;
     },
-    //...mapActions(["addcurso"]),
+
+    editCurso() {
+      let curso = this.editItem
+      curso.id = this.id
+      this.updateCurso(curso)
+        .then(() => {
+          alert("curso actualizado , correctamente");
+          this.$router.push("/");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   // watch: {},
   // components: {},
   // -- Lifecycle Methods
   // beforeCreate() {},
-  // created() {},
-  // beforeMount() {},
-  // mounted() {},
-  // beforeUpdate() {},
-  // updated() {},
-  // beforeDestroy() {},
-  // destroyed() {},
-  // -- End Lifecycle Methods
+  async created() {
+    this.setCurso();
+  },
 };
+
+// beforeMount() {},
+// mounted() {},
+// beforeUpdate() {},
+// updated() {},
+// beforeDestroy() {},
+// destroyed() {},
+// -- End Lifecycle Methods
 </script>
 
-<style scoped></style>
+<style scoped>
+.btnEdicion {
+  display: flex;
+  justify-content: center;
+}
+</style>
