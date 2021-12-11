@@ -24,7 +24,7 @@ export default {
     signOut(auth).then(() => {
       this.resetEmail();
   // Sign-out successful.
-  alert('si funciona')
+  alert('su sesion se ah cerrado con exito ')
 
   this.$router.push('/login');
 }).catch((error) => {

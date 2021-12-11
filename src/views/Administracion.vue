@@ -182,26 +182,26 @@
     </v-row>
     <v-row>
       <v-col>
-        <v-alert dense outlined color="purple" icon="account-group">
+        <v-alert dense outlined color="purple" icon="group">
           Cantidad total de alumnos permitidos: {{ getTotalCupos }}
         </v-alert>
 
-        <v-alert dense outlined color="blue" icon="account-multiple-check">
+        <v-alert dense outlined color="blue" icon="info">
           Cantidad total de alumnos inscritos: {{ getTotalInscritos }}
         </v-alert>
 
-        <v-alert dense outlined color="pink" icon="account-clock">
+        <v-alert dense outlined color="pink" icon="info">
           Cantidad total de cupos restantes: {{ getTotalCuposRestantes }}
         </v-alert>
-        <v-alert dense outlined color="red" icon="cancel">
-          Cantidad total de cursos terminados: {{getTotalCursosTerminados}}
+        <v-alert dense outlined color="red" icon="check">
+          Cantidad total de cursos terminados: {{getTotalCursosActivos}}
         </v-alert>
 
-        <v-alert dense outlined color="teal" icon="check">
-          Cantidad total de cursos activos: {{ getTotalCursosActivos }}
+        <v-alert dense outlined color="teal" icon="cancel">
+          Cantidad total de cursos activos: {{ getTotalCursosTerminados }}
         </v-alert>
 
-        <v-alert dense outlined color="deep-orange" icon="bell-ring">
+        <v-alert dense outlined color="deep-orange" icon="list">
           Cantidad total de cursos:  {{ getTotalCursos }}
         </v-alert>
       </v-col>

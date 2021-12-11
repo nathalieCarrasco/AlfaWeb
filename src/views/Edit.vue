@@ -128,7 +128,7 @@ export default {
   // components: {},
   // -- Lifecycle Methods
   // beforeCreate() {},
-  async created() {
+   created() {
     this.setCurso();
   },
 };

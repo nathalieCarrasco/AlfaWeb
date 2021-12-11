@@ -6,9 +6,9 @@ import { collection, getDocs , addDoc,doc,getDoc,updateDoc, deleteDoc  } from "f
 Vue.use(Vuex);
 
 const totalCupos = (cursos) =>
-  cursos.reduce((acc, act) => acc + act.cupos,0 );
+(cursos.reduce((acc, act) => acc + parseInt(act.cupos),0 ));
 const totalInscritos = (cursos) =>
-  cursos.reduce((acc, act) => acc + act.inscritos, 0);
+ (cursos.reduce((acc, act) => acc + act.inscritos, 0));
 
 export default new Vuex.Store({
   state: {
@@ -22,10 +22,9 @@ export default new Vuex.Store({
     getCursos: ({ cursos }) => {
       return cursos;
     },
-    getTotalCupos:  (state) => {
-      return state.cursos.reduce(function(total,curso){
-        return total + parseInt(curso.cupos)
-      })
+    getTotalCupos: ({ cursos }) => {
+      return totalCupos(cursos)
+
     },
     getTotalInscritos:(state)=> {
       return state.cursos.reduce(function(total, curso){
@@ -33,7 +32,7 @@ export default new Vuex.Store({
       },0)
     },
     getTotalCuposRestantes: ({ cursos }) => {
-      return totalCupos(cursos) - totalInscritos(cursos)
+      return parseInt(totalCupos) -parseInt(totalInscritos)
     },
     getTotalCursosTerminados: ({ cursos }) => {
       return cursos.filter((curso) => !curso.estado).length
